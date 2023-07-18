@@ -1,0 +1,7 @@
+fastapi~=0.93
+uvicorn==0.22.0
+pydantic~=1.10.7
+pydantic[email]
+PyJWT==2.7.0
+python-decouple
+pymongo[srv]
