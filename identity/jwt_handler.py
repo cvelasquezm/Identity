@@ -1,10 +1,13 @@
 import time
-import jwt
-from decouple import config
-from jwt import ExpiredSignatureError
+from os import environ
 
-JWT_SECRET = config("secret")
-JWT_ALGORITHM = config("algorithm")
+import jwt
+from jwt import ExpiredSignatureError
+from pydantic import constr, conint
+
+JWT_SECRET: constr(min_length=1) = environ["JWT_SECRET"]
+JWT_ALGORITHM: constr(min_length=1) = environ["JWT_ALGORITHM"]
+JWT_EXP_TIME: conint(gt=0) = int(environ["JWT_EXP_TIME"])
 
 
 def token_response(token: str):
@@ -16,7 +19,7 @@ def token_response(token: str):
 def sign_jwt(username: str):
     payload = {
         "username": username,
-        "exp": time.time() + 60
+        "exp": time.time() + JWT_EXP_TIME
     }
 
     token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
